@@ -19,3 +19,8 @@ list_all([], []).
 
 list_one(Number, [Number, Square]) :-
     Square is Number * Number.
+
+
+
+member(X,[X|_]).
+member(X,[_|Y]) :- member(X,Y).
