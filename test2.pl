@@ -8,12 +8,22 @@ append([X|Y],Z,[X|W]) :- append(Y,Z,W).    % your first line
 
 
 
-count(X,[],0).
+%smallest(X,Y,Z,D):- Y==nil,D is X.  
 
-count(X,[X|Y],Res+1  ):- count(X,Y, Res).
+%smallest(X,Y,Z,D):- Y\=nil, D is Y.
 
-count( X, [X1|Y],Res) :- X1\=X,count(X,Y,Res). 
+smallest(S,tree(X,L,R)) :- L==nil, S is X.
 
-count2([],X,0).
-count2([X|T],X,Y):- count2(T,X,Z), Y is 1+Z.
-count2([X1|T],X,Z):- X1\=X,count2(T,X,Z).
+smallest(S,tree(X,L,R)) :- L\=nil, not(number(L)), smallest(S,L).
+
+smallest(S,tree(X,L,R)) :- L\= nil, number(L), S is L.
+
+
+member(M, tree(X,L,R) ):- M==X, M is X.
+
+member(M,tree(X,L,R)):- X > M, member(M,L).
+
+member(M,tree(X,L,R)) :- X< M, member(M, R).
+
+
+
