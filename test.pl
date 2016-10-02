@@ -13,11 +13,11 @@ append([Y|L],X,[Y|R]):- append(L,X,R).
 append2([X|Y],Z,[X|W]) :- append2(Y,Z,W).  
 append2([],X,X).
 
-
+frequencies(X,L):- list_all(X,L).
 
 list_all([Head | Tail], [SqPair | SqTail]) :-
-    list_one(Head, SqPair,Tail),
-    list_all(Tail, SqTail).
+    list_one(Head, SqPair,Tail),delete(Tail,Head,NewTail),
+    list_all(NewTail,SqTail) .
 list_all([], []).
 
 
