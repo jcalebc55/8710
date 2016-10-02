@@ -16,17 +16,17 @@ append2([],X,X).
 
 
 list_all([Head | Tail], [SqPair | SqTail]) :-
-    list_one(Head, SqPair),
+    list_one(Head, SqPair,Tail),
     list_all(Tail, SqTail).
 list_all([], []).
 
 
-list_one(Number, [Number, 1]) .
+list_one(Number,[Number,Z],Lis):- 
+count(Lis,Number,Count), Z is Count +1.
+
+ %:- Count is count(Number,Tail).
 
 
-count(X,[],0).
-
-count( X, [X|Y], Res+1):- count( X, Y,Res).
-
-count(X,[X1|Y], Res):- X1\=X, count(X,Y,Res).
-
+count([],X,0).
+count([X|T],X,Y):- count(T,X,Z), Y is 1+Z.
+count([X1|T],X,Z):- X1\=X,count(T,X,Z).
