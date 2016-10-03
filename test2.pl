@@ -15,7 +15,7 @@ append([X|Y],Z,[X|W]) :- append(Y,Z,W).    % your first line
 % smallest
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-smallest(S,tree(X,L,R)) :- L==nil, S is X.
+smallest(X,tree(X,nil,R)).
 
 smallest(S,tree(X,L,R)) :- L\=nil, not(number(L)), smallest(S,L).
 
@@ -42,6 +42,18 @@ max(H,L,R):- L==R, H is L.
 height(nil, H) :- H is 0.
 
 height(tree(X,L,R), H):- height(L,LH), height(R,RH), max(Z,LH,RH), H is 1 +Z.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% insert
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+insert(X,tree(Y,L,R),tree(Y,T,R) ) :- X < Y, insert(X,L,T).
+insert(X,tree(Y,L,R),tree(Y,L,T)):- X > Y, insert(X,R,T).
+insert(X,tree(Y,L,R),tree(X,L,R)):- X==Y.
+insert(X,nil,tree(X,nil,nil)).
+
+ 
 
 
 
