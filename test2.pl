@@ -53,17 +53,27 @@ insert(X,tree(Y,L,R),tree(Y,L,T)):- X > Y, insert(X,R,T).
 insert(X,tree(Y,L,R),tree(X,L,R)):- X==Y.
 insert(X,nil,tree(X,nil,nil)).
 
- 
 
-
-
-
-
-
-
-
-
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Delete
+%%%%%%%%%%%%%%%%%%%%%%%
+delet(X,tree(Y,L,R),tree(Y,T,R)):- X < Y,delet(X,L,T).
+delet(X,tree(Y,L,R),tree(Y,L,T)) :- X > Y,delet(X,R,T).
+%% deleting leaf node
+delet(X,tree(X,nil,nil),nil).
+%% node is notfound
+delet(X,tree(Y,nil,nil),tree(Y,nil,nil)):-X\=Y.
+%% left tree is nil
+delet(X,tree(X,nil,R),R).
+%% right tree is nil
+delet(X,tree(X,L,nil),L).
+delet(X,tree(X,L,R),tree(Y,L,R1)) :- findLeftMost(R,Y),restructure(R,R1).
+findLeftMost(tree(X,L,R),Y):- findLeftMost(L,Y).
+%%Finding right left most node
+findLeftMost(tree(X,nil,R),X).
+restructure(tree(X,L,R), tree(X,L1,R)):-restructure(L,L1).
+%% Delete right left most node which is made root
+restructure(tree(X,nil,R),R).
 
 
 
