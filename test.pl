@@ -30,3 +30,7 @@ count(Lis,Number,Count), Z is Count +1.
 count([],X,0).
 count([X|T],X,Y):- count(T,X,Z), Y is 1+Z.
 count([X1|T],X,Z):- X1\=X,count(T,X,Z).
+
+test(X,Y).
+test(X,Y,Z):- write('correct the number of arguments. No supported is 2'),fail.
+

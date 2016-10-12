@@ -17,9 +17,8 @@ append([X|Y],Z,[X|W]) :- append(Y,Z,W).    % your first line
 
 smallest(X,tree(X,nil,R)).
 
-smallest(S,tree(X,L,R)) :- L\=nil, not(number(L)), smallest(S,L).
+smallest(S,tree(X,L,R)) :-  L\=nil,smallest(S,L).
 
-smallest(S,tree(X,L,R)) :- L\= nil, number(L), S is L.
 %%%%%%%%%%%%%
 %Member
 %%%%%%%%%%%%
@@ -67,7 +66,7 @@ delet(X,tree(Y,nil,nil),tree(Y,nil,nil)):-X\=Y.
 delet(X,tree(X,nil,R),R).
 %% right tree is nil
 delet(X,tree(X,L,nil),L).
-delet(X,tree(X,L,R),tree(Y,L,R1)) :- findLeftMost(R,Y),restructure(R,R1).
+delet(X,tree(X,L,R),tree(Y,L,R1)) :- L\=nil,R\=nil,findLeftMost(R,Y),restructure(R,R1).
 findLeftMost(tree(X,L,R),Y):- findLeftMost(L,Y).
 %%Finding right left most node
 findLeftMost(tree(X,nil,R),X).

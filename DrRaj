@@ -1,0 +1,6 @@
+?- wfe(with([x,3],plus(2,5))).
+false.
+
+?- wfe(with([[x,3]],plus(2,5))).
+true .
+
