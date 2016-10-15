@@ -34,3 +34,12 @@ count([X1|T],X,Z):- X1\=X,count(T,X,Z).
 test(X,Y).
 test(X,Y,Z):- write('correct the number of arguments. No supported is 2'),fail.
 
+
+getValues([],[],[]).
+getValues([[X,Y]|L],[X|Keys],[Y|Values]):- getValues(L,Keys,Values).
+
+
+hasNoDuplicates(L):- sort(L,L1),eleCount(L,L1).
+
+eleCount(TL,[Y|SL]):-count(TL,Y,C),C==1,eleCount(TL,SL).   
+eleCount(TL,[]). 
