@@ -43,3 +43,52 @@ hasNoDuplicates(L):- sort(L,L1),eleCount(L,L1).
 
 eleCount(TL,[Y|SL]):-count(TL,Y,C),C==1,eleCount(TL,SL).   
 eleCount(TL,[]). 
+
+
+
+ q1([]).
+    q1([X]).
+    q1(L):- append([F|M],[F],L),q1(M). 
+
+    q2([],[],[]).
+    q2([X],[X],[]).
+    q2([X,Y|L],[X|L1],[Y|L2]) :- q2(L,L1,L2).
+
+
+
+male(john, 35).    
+female(anna, 27).
+    male(eric, 26).    
+female(tina, 30).
+    male(fred, 28).    
+female(karen, 28).
+names([],[],[]).
+names([X|L],[X|M],F):- male(X,_),names(L,M,F).
+names([X|L],M,[X|F]):-female(X,_),names(L,M,F).
+
+
+
+
+edge(2,3).
+edge(3,4).
+edge(4,5).
+edge(5,6).
+
+edge(X,Y):-ed(X,Y).
+ed(X,Y):-ed(Y,X).
+ptrue(X):-ed(X,Y),not(degOne(X)).
+degOne(X):- ed(X,Y),ed(X,Z),Y\=Z.
+
+
+
+
+
+
+
+
+
+
+
+
+
+

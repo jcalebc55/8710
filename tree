@@ -1,0 +1,1 @@
+tree(20, tree(10,nil,nil),tree(30, tree(25,tree(21,nil,tree(23,nil,nil  ) ),tree(27,tree(26,nil,nil),nil) ) , tree(40,nil,nil) ))

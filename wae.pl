@@ -47,28 +47,27 @@ hasNoDuplicates(L):- sort(L,L1),eleCount(L,L1).
 
 eleCount(TL,[Y|SL]):-count(TL,Y,C),C==1,eleCount(TL,SL).
 eleCount(TL,[]).
-
-semCheck(X):-number(X).
-semCheck(X):- atom(X).
-semCheck(plus(X,Y)):-semCheck(X),semCheck(Y).
-semCheck(minus(X,Y)):-semCheck(X),semCheck(Y).
-semCheck(times(X,Y)):-semCheck(X),semCheck(Y).
-semCheck(divide(X,Y)):-semCheck(X),semCheck(Y).
-semCheck(with(L,X)):- getValues(L,K,V),hasNoDuplicates(K), semCheck(X), semCheckList(V).
-
-
-%hasDuplicates(L,  ):-dictionary([[X,Y]|L]).
-
-
-
-
-
 evalExp(A,A):- number(A).
 evalExp(plus(A,B),C):- evalExp(A,A1),evalExp(B,B1),C is A1+B1.
 evalExp(minus(A,B),C):- evalExp(A,A1),evalExp(B,B1),C is A1-B1.
 evalExp(times(A,B),C):- evalExp(A,A1),evalExp(B,B1),C is A1*B1.
-evalExp(divide(A,B),C):- evalExp(A,A1),evalExp(B,B1),B1 \=0, C is A1/B1.
+evalExp(divide(A,B),C):- evalExp(A,A1),evalExp(B,B1),B1\=0, C is A1/B1.
 evalExp(with(L,E), C ) :- evaluateDictVals(L,M), applyDict(M,E,F), evalExp(F,C).
+
+
+
+
+semCheck(X):-number(X).
+semCheck(X):- atom(X).
+semCheck(plus(X,Y)):-semCheck(X),semCheck(Y),evalExp(plus(X,Y),C).
+semCheck(minus(X,Y)):-semCheck(X),semCheck(Y),evalExp(minus(X,Y),C).
+semCheck(times(X,Y)):-semCheck(X),semCheck(Y),evalExp(times(X,Y),C).
+semCheck(divide(X,Y)):- Y\=0,semCheck(X),semCheck(Y),evalExp(divide(X,Y),C).
+semCheck(with(L,X)):- getValues(L,K,V),hasNoDuplicates(K), semCheck(X), semCheckList(V),evalExp(with(L,X),C).
+
+
+%hasDuplicates(L,  ):-dictionary([[X,Y]|L]).
+
 
 
 
@@ -82,5 +81,13 @@ applyDict([[X,V]|L],E,G):- applySingleSub(X,V,E,F),applyDict(L,F,G).
 
 
 applySingleSub(X,V,plus(A,B),plus(A1,B1)):- applySingleSub(X,V,A,A1),applySingleSub(X,V,B,B1).
+applySingleSub(X,V,X,V).
+applySingleSub(X,V,P,P):- P\=X,number(P).
+applySingleSub(X,V,minus(A,B),minus(A1,B1)):- applySingleSub(X,V,A,A1),applySingleSub(X,V,B,B1).
+applySingleSub(X,V,times(A,B),times(A1,B1)):- applySingleSub(X,V,A,A1),applySingleSub(X,V,B,B1).
+applySingleSub(X,V,divide(A,B),divide(A1,B1)):- applySingleSub(X,V,A,A1),applySingleSub(X,V,B,B1).
 
 
+
+
+evalWAE(X,V):-wfe(X),semCheck(X),evalExp(X,V).

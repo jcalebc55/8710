@@ -1,0 +1,84 @@
+Csc 8710, Deductive Databases and Logic Programming (Fall 2016)
+
+Homework 4 (Due: October 30th)
+
+Write a Prolog program to compute a Relational Algebra expression corresponding to an atomic formula in Datalog. Here are some sample atomic formulas from Datalog:
+employee("jones",20,x,y,"john",x,y,x,x,z)
+p(x,x,x,x,x)
+p(x,20,x,y,"john",x,y)
+student(x,y,z)
+We shall assume that these atomic formulas are represented in list form as follows:
+[employee,["jones",20,x,y,"john",x,y,x,x,z]]
+[p,[x,x,x,x,x]]
+[p,[x,20,x,y,"john",x,y]]
+[student,[x,y,z]]
+i.e. a list of two items, the first being the predicate name and the second being a list of arguments. Notice that we use Prolog Symbolic atoms (lower case beginning) for Datalog variables. The Prolog program should contain definition of the main predicate, af2ra(F,Q) which takes as input an atomic formula, F, as its first argument and returns a relational algebra query as a string value, Q, in its second argument. Here are some sample runs:
+?- af2ra([employee,["jones",20,x,y,"john",x,y,x,x,z]],Q).
+
+Q = "rename[y,x,z](project[x_6,x_8,x_9](select[x_0='jones' and x_1=20 and x_4='john' and x_2=x_5 and x_3=x_6 and x_5=x_7 and x_7=x_8](rename[x_0,x_1,x_2,x_3,x_4,x_5,x_6,x_7,x_8,x_9](employee))))" .
+
+?- af2ra([p,[x,x,x,x,x]],Q).
+
+Q = "rename[x](project[x_4](select[x_0=x_1 and x_1=x_2 and x_2=x_3 and x_3=x_4](rename[x_0,x_1,x_2,x_3,x_4](p))))" .
+
+?- af2ra([p,[x,20,x,y,"john",x,y]],Q).
+
+Q = "rename[x,y](project[x_5,x_6](select[x_1=20 and x_4='john' and x_0=x_2 and x_2=x_5 and x_3=x_6](rename[x_0,x_1,x_2,x_3,x_4,x_5,x_6](p))))" .
+
+?- af2ra([student,[x,y,z]],Q).
+
+Q = "rename[x,y,z](student)" .
+Please include
+?- set_prolog_flag(double_quotes,string).
+as the first line of your program. This allows you to use strings enclosed within double quotes.
+Useful built-in predicates:
+1 ?- set_prolog_flag(double_quotes,string).
+true.
+
+2 ?- append([a,b],[c,d],L).
+L = [a, b, c, d].
+
+3 ?- atom(student).
+true.
+
+4 ?- atom(10).
+false.
+
+5 ?- atom("jones").
+false.
+
+6 ?- atom_chars(student,L).
+L = [s, t, u, d, e, n, t].
+
+8 ?- length([a,b,c],N).
+N = 3.
+
+9 ?- member(a,[b,c,a,d]).     
+true .
+
+10 ?- member(c,[a,d,f]).
+false.
+
+11 ?- number(10).
+true.
+
+12 ?- number(12.6).
+true.
+
+13 ?- number(ten).
+false.
+
+14 ?- string(10).
+false.
+
+15 ?- string("10").
+true.
+
+16 ?- string_concat("This is a ","string.",S).
+S = "This is a string.".
+
+17 ?- string_to_atom("student",A).
+A = student.
+
+18 ?- string_to_atom(S,student).
+S = "student".

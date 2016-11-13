@@ -1,0 +1,77 @@
+Csc 8710, Deductive Databases and Logic Programming (Fall 2016)
+
+Homework Assignment 3; Due: 2 October, 2016 (Sunday)
+
+Write a Prolog program to implement the predicate frequencies(L,M), which takes as input a list L and returns a list of pairs [x,n], where x is an element of L and n is the number of times x appears in L. Here are some sample runs in SWI Prolog:
+?- frequencies([a,b,a,c,a,c,d,a],L).
+
+L = [[a, 4], [b, 1], [c, 2], [d, 1]] 
+
+Yes
+?- frequencies([],L).
+
+L = [] 
+
+Yes
+Assume that a binary tree is represented in Prolog using the function term
+  tree(X,LeftSubTree,RightSubTree)
+where X is the element at any node and LeftSubTree and RightSubTree are the left sub-tree and the right sub-tree for the node respectively. The term nil is used when there is no left sub-tree or right-tree. For example, the following function term:
+tree(20,tree(10,nil,nil),tree(40,tree(30,nil,nil),nil))
+would represent the following binary (search) tree:
+           20
+          /  \
+        10    40
+             /  
+            30  
+Recall that a binary search tree is a binary tree in which all the elements in the left sub-tree of a node are less than the element at the node and all the elements in the right sub-tree of a node are greater than the element at the node. Assume that the binary search tree is being used to represent a set of numbers with no duplicates. Write Prolog programs for the following predicates:
+smallest(X,T) is true if X is the smallest element in the binary search tree T.
+member(X,T) is true if X is an element in the binary search tree T.
+height(T,H) is true if H is the height of the binary search tree T where height is defined as the length of the longest path from root to leaf node.
+insert(X,T1,T2) is true if T2 is the tree obtained by inserting X in the binary search tree T1.
+delete(X,T1,T2) is true if T2 is the tree obtained by deleting X from the binary search tree T1.
+Consider the following grammar defining a functional language of arithmetic expressions:
+<WAE> ::= <num>
+    | {+ <WAE> <WAE>}
+    | {- <WAE> <WAE>}
+    | {* <WAE> <WAE>}
+    | {/ <WAE> <WAE>}
+    | {with {{<id> <WAE>} ...} <WAE>}
+    | <id>
+where an <id> is not +, -, *, /, or with.
+In this grammar, the ellipsis (...) means that the previous non-terminal is present zero or more times. Examples of wae-expressions are:
+2
+x
+{+ 2 2}
+{+ x 2}
+{/ 4 2}
+{with {x 3} {with {y 4} {+ y z} } }
+{with {{x 2} {y 3}} {with {{z {+ x y}}} {+ x z}}}
+{+ {+ {+ 2 3} {+ 4 5}} {+ 5 7}}
+{with {x {with {y 3} {+ y y}}} {+ x x}}
+{with {x {with {x {with {y 3} {+ y y}}} {+ x x}}}  {+ x 2} }
+If a wae-expression has duplicate identifiers, we consider it a semantic error. For example, {with {{x 10} {x 20}} 50} has the duplicate identifier error.
+We will code the above wae-expressions in Prolog using function terms and lists as follows:
+
+2
+x
+plus(2,2)
+plus(x,2)
+divide(4,2)
+with([[x,3]],with([[y,4]],plus(y,z)))
+with([[x,2],[y,3]],with([[z,plus(x,y)]],plus(x,z)))
+plus(plus(plus(2,3),plus(4,5)),plus(5,7))
+with([[x,with([[y,3]],plus(y,y))]],plus(x,x))
+with([[x,
+       with([[x,
+              with([[y,3]],plus(y,y))
+            ]],
+            plus(x,x)
+       )
+     ]],
+     plus(x,2)
+)
+Write a Prolog program to do the following:
+Syntax check: define a predicate, wfe(E), which returns true if and only if E is a well-formed wae-expression.
+Semantic Check: define a predicate, semCheck(E), which returns true if and only if there are no semantic errors in E. You should check for two semantic errors: duplicate identifier in with-list and value-not-available for evaluation. Example of the second semantic error is: {with {{x 2}} {+ x y}} If there are errors, a message indicating the error should be printed.
+Evaluate WAE Expression: define a predicate, evalWAE(E,V), which returns the value of expression E in V.
+
