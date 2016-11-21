@@ -1,0 +1,58 @@
+Csc 8710, Deductive Databases and Logic Programming (Fall 2016)
+
+Homework 5 (Due: December 4th - Sunday)
+
+Write a program in your favorite language (Java preferred) that implements the "Naive" algorithm to compute the "sibling", "cousin", and "related" tables of the following deductive database:
+sibling(X,Y) :- parent(X,Z), parent(Y,Z), X <> Y.
+cousin(X,Y) :- parent(X,Xp), parent(Y,Yp), sibling(Xp,Yp).
+cousin(X,Y) :- parent(X,Xp), parent(Y,Yp), cousin(Xp,Yp).
+related (X,Y) :- sibling(X,Y).
+related(X,Y) :- related(X,Z), parent(Y,Z).
+related(X,Y) :- related(Z,Y), parent(X,Z).
+Keep track of the total number of SQL "insert" statements that are submitted to the server for each IDB predicate. Print the number of inserts for each predicate.
+Write a program in your favorite language (Java preferred) that implements the "Semi-Naive" algorithm to compute the "sibling", "cousin", and "related" tables of the same database. Keep track of the total number of SQL "insert" statements that are submitted to the server for each IDB predicate.
+Write a program in your favorite language (Java preferred) that implements the "Semi-Naive" algorithm to compute the "sibling" and "cousin" tables using the magic sets transformed IDB for the query:
+  query(X) :- cousin("tom",X).
+The magic sets transformed IDB is:
+magic_cousin_bf("tom").
+magic_cousin_bf(Xp) :- parent(X,Xp), magic_cousin_bf(X).
+magic_sibling_bf(Xp) :- parent(X,Xp), magic_cousin_bf(X).
+
+query(X) :- cousin_bf(h,X).
+cousin_bf(X,Y) :- parent(X,Xp), parent(Y,Yp), sibling_bf(Xp,Yp),
+                  magic_cousin_bf(X).
+cousin_bf(X,Y) :- parent(X,Xp), parent(Y,Yp), cousin_bf(Xp,Yp),
+                  magic_cousin_bf(X).
+sibling_bf(X,Y) :- parent(X,Z), parent(Y,Z), X <> Y,
+                   magic_sibling_bf(X).
+Keep track of the total number of SQL "insert" statements that are submitted to the server for each IDB predicate.
+Here are three different EDBs to test your program.
+EDB 1
+EDB 2
+EDB 3
+// Sample JDBC program to connect to Oracle on tinman and execute a query
+import java.sql.*; 
+import oracle.jdbc.pool.OracleDataSource;
+import java.io.*; 
+
+class SimpleJDBC { 
+  public static void main (String args []) 
+      throws SQLException, IOException { 
+
+    OracleDataSource ods = new OracleDataSource();
+    ods.setDriverType("thin");
+    ods.setServerName("tinman.cs.gsu.edu");
+    ods.setDatabaseName("tinman");
+    ods.setPortNumber(new Integer(1522));
+    ods.setUser("OracleUserID");
+    ods.setPassword("OraclePassword");
+
+    Connection conn=ods.getConnection();
+    Statement stmt = conn.createStatement (); 
+    ResultSet rset = stmt.executeQuery("select a from temp");
+    while (rset.next ()) 
+      System.out.println(rset.getInt(1));
+    conn.close();
+  } 
+
+} 
